@@ -21,30 +21,30 @@ The output database contains two tables:
 
 - [`cmd/scantodb/main.go`](./cmd/scantodb/main.go) - Scans media libraries for both mediafiles and moongas `artist.yaml` files, outputs an SQLite database (`.db`) file
 ```bash
-go run cmd/scantodb/main.go conf/conf.yaml out/mediascan.db
+go run cmd/scantodb/main.go mediascan-config.yaml mediascan.db
 ```
 
 ### Scan to Yaml (deprecated)
 
 These commands scan media files and `artist.yaml` files and output massive combined yaml files. This was the original implementation before switching to sqlite. These may be removed in the future.
 
-- [`cmd/scanfilesyaml/main.go`](./cmd/scanfilesyaml/main.go) - Recursively scan a directory for media files, extract metadata (including ID3v2 tags from both MP3 and M4A files), and save the output in a YAML file e.g. [files.yaml](/out/files.yaml). 
-- Reads configuration from YAML file e.g. [conf.yaml](conf/conf.yaml)
+- [`cmd/scanfilesyaml/main.go`](./cmd/scanfilesyaml/main.go) - Recursively scan a directory for media files, extract metadata (including ID3v2 tags from both MP3 and M4A files), and save the output in a mediafiles YAML file (`files.yaml`). 
+- Reads configuration from YAML file e.g. [mediascan-config.yaml](./mediascan-config.yaml)
 - Has only two required command-line arguments: `{config yaml filepath}` and `{output yaml filepath}`
 - Created specifically to run fast on a Raspberry Pi single-board computer as part of another project of mine.
 - Usage:
 ```bash
-go run cmd/scanfilesyaml/main.go conf/conf.yaml out/files.yaml
+go run cmd/scanfilesyaml/main.go mediascan-config.yaml files.yaml
 ```
-- [`cmd/scanartistsyaml/main.go`](./cmd/scanartistsyaml/main.go) - Scans artist directories for `artist.yaml` files and aggregates them into a combined `artists.yaml` file.
+- [`cmd/scanartistsyaml/main.go`](./cmd/scanartistsyaml/main.go) - Scans artist directories for `artist.yaml` files and aggregates them into a combined artists YAML file (`artists.yaml`).
 - Usage:
 ```bash
-go run cmd/scanartistsyaml/main.go conf/conf.yaml out/artists.yaml
+go run cmd/scanartistsyaml/main.go mediascan-config.yaml artists.yaml
 ```
 
 ## mediascan.go YAML Configuration file Reference
 
-The mediascan.go YAML configuration file (example: [conf.yaml](./conf/conf.yaml)) supports the following parameters:
+The mediascan.go YAML configuration file (example: [conf.yaml](./mediascan-config.yaml)) supports the following parameters:
 
 | Property | Description |
 | -------- | ----------- |

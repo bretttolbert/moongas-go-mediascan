@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 
 	_ "github.com/mattn/go-sqlite3" // Import go-sqlite3 library
 
@@ -20,12 +21,20 @@ func main() {
 	if len(os.Args) != 3 {
 		fmt.Println("Error: Invalid arguments")
 		fmt.Println("Usage: go run cmd/scantodb/main.go {config yaml filepath} {output database filepath}")
-		fmt.Println("Example: go run cmd/scantodb/main.go conf/conf.yaml out/mediascan.db")
+		fmt.Println("Example: go run cmd/scantodb/main.go mediascan-config.yaml mediascan.db")
 		os.Exit(1)
 	}
 	configYamlFilepath := os.Args[1]
 	outputDBFilepath := os.Args[2]
 	conf := shared.LoadConf(configYamlFilepath)
+
+
+	outputDBAbsFilepath, err := filepath.Abs(outputDBFilepath)
+	if err != nil {
+		log.Fatalf("Failed to get absolute path to output file: %v", err)
+	}
+
+
 	var files shared.MediaFiles = shared.ScanFiles(conf)
 	var artists shared.Artists = shared.ScanArtists(conf)
 
@@ -57,6 +66,8 @@ func main() {
 	// DISPLAY INSERTED RECORDS
 	displayMediaFiles(sqliteDatabase)
 	displayArtists(sqliteDatabase)
+
+	log.Printf("Written to file %s", outputDBAbsFilepath)
 }
 
 func createTableMediaFile(db *sql.DB, files shared.MediaFiles) {
