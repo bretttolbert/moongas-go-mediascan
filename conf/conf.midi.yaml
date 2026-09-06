@@ -1,0 +1,14 @@
+mediaDirs: 
+    - /media/brett/My Book/Dev/Git/midijuke/data/midi/
+mediaExts:
+    - .midi
+    - .mid
+excludePaths: []
+excludeTitle: []
+excludeArtist: []
+excludeAlbumArtist: []
+excludeAlbum: []
+excludeGenre: []
+sortBy: year
+groupBy: none
+getMp3Duration: false

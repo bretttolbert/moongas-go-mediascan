@@ -1,0 +1,50 @@
+package main
+
+import (
+	"fmt"
+	"log"
+	"os"
+	"strconv"
+
+	"github.com/bretttolbert/moongas-mediascan-go/internal/shared"
+	"gopkg.in/yaml.v3"
+)
+
+func main() {
+	if len(os.Args) != 3 {
+		fmt.Println("Error: Invalid arguments")
+		fmt.Println("Usage: go run cmd/scanfilesyaml/main.go {config yaml filepath} {output yaml filepath}")
+		fmt.Println("Example: go run cmd/scanfilesyaml/main.go conf/conf.yaml out/files.yaml")
+		os.Exit(1)
+	}
+	configYamlFilepath := os.Args[1]
+	outputYamlFilepath := os.Args[2]
+	conf := shared.LoadConf(configYamlFilepath)
+	var files shared.MediaFiles = shared.ScanFiles(conf)
+
+	// consider "GroupBy" deprecated, I'm probably going to remove this feature
+	// (GroupBy and MediaFilePlaylistList) as it duplicates functionality provided by mediaserver
+	// however I was going to use for my timebox project, we shall see
+	if conf.GroupBy == "year" {
+		var mediaFilePlaylistList shared.MediaFilePlaylistList
+		mediaFilePlaylistList.Playlists = make(map[string][]shared.MediaFile)
+		for _, m := range files.Files {
+			year := strconv.FormatInt(int64(m.Year), 10)
+			_, ok := mediaFilePlaylistList.Playlists[year]
+			if !ok {
+				mediaFilePlaylistList.Playlists[year] = make([]shared.MediaFile, 0)
+			}
+			mediaFilePlaylistList.Playlists[year] = append(mediaFilePlaylistList.Playlists[year], m)
+		}
+		yamlData, err := yaml.Marshal(&mediaFilePlaylistList)
+		shared.Check(err, "")
+		err2 := os.WriteFile(outputYamlFilepath, yamlData, 0644)
+		shared.Check(err2, outputYamlFilepath)
+	} else {
+		yamlData, err := yaml.Marshal(&files)
+		shared.Check(err, "")
+		err2 := os.WriteFile(outputYamlFilepath, yamlData, 0644)
+		shared.Check(err2, outputYamlFilepath)
+	}
+	log.Printf("Written to file %s", outputYamlFilepath)
+}
