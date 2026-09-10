@@ -51,6 +51,11 @@ func ScanFiles(conf MediascanConf) MediaFiles {
 	countTagsFailed := 0
 	countSkipped := 0
 	for _, mediaDir := range conf.MediaDirs {
+		if _, err := os.Stat(mediaDir); err != nil {
+			log.Printf("ERROR: mediaDir does not exist or could not be accessed: %s (%v)", mediaDir, err)
+			continue
+		}
+		log.Printf("Scanning file media dir: %s", mediaDir)
 		err := filepath.Walk(mediaDir,
 			func(path string, info os.FileInfo, err error) error {
 				if err != nil {

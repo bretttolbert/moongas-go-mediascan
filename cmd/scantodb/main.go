@@ -25,15 +25,25 @@ func main() {
 		log.Printf("Current working directory: %s", cwd)
 	}
 
-	if len(os.Args) != 3 {
+	if len(os.Args) < 3 || len(os.Args) > 4 {
 		fmt.Println("Error: Invalid arguments")
-		fmt.Println("Usage: go run cmd/scantodb/main.go {config yaml filepath} {output database filepath}")
-		fmt.Println("Example: go run cmd/scantodb/main.go mediascan-config.yaml mediascan.db")
+		fmt.Println("Usage: go run cmd/scantodb/main.go {config yaml filepath} {output database filepath} [mediaRootdir]")
+		fmt.Println("Example: go run cmd/scantodb/main.go mediascan-config.yaml mediascan.db /path/to/root")
 		os.Exit(1)
 	}
 	configYamlFilepath := os.Args[1]
 	outputDBFilepath := os.Args[2]
+	mediaRootDir := ""
+	if len(os.Args) == 4 {
+		mediaRootDir = os.Args[3]
+	}
 	conf := shared.LoadConf(configYamlFilepath)
+	resolvedMediaDirs, err := shared.ResolveMediaDirs(mediaRootDir, conf.MediaDirs)
+	if err != nil {
+		log.Printf("ERROR: %v", err)
+		os.Exit(1)
+	}
+	conf.MediaDirs = resolvedMediaDirs
 
 
 	outputDBAbsFilepath, err := filepath.Abs(outputDBFilepath)

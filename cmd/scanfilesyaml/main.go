@@ -19,16 +19,26 @@ func main() {
 		log.Printf("Current working directory: %s", cwd)
 	}
 
-	if len(os.Args) != 3 {
+	if len(os.Args) < 3 || len(os.Args) > 4 {
 		fmt.Println("Error: Invalid arguments")
-		fmt.Println("Usage: go run cmd/scanfilesyaml/main.go {config yaml filepath} {output yaml filepath}")
-		fmt.Println("Example: go run cmd/scanfilesyaml/main.go mediascan-config.yaml files.yaml")
+		fmt.Println("Usage: go run cmd/scanfilesyaml/main.go {config yaml filepath} {output yaml filepath} [mediaRootdir]")
+		fmt.Println("Example: go run cmd/scanfilesyaml/main.go mediascan-config.yaml files.yaml /path/to/root")
 		os.Exit(1)
 	}
 	configYamlFilepath := os.Args[1]
 	outputYamlFilepath := os.Args[2]
+	mediaRootDir := ""
+	if len(os.Args) == 4 {
+		mediaRootDir = os.Args[3]
+	}
 
 	conf := shared.LoadConf(configYamlFilepath)
+	resolvedMediaDirs, err := shared.ResolveMediaDirs(mediaRootDir, conf.MediaDirs)
+	if err != nil {
+		log.Printf("ERROR: %v", err)
+		os.Exit(1)
+	}
+	conf.MediaDirs = resolvedMediaDirs
 
 	outputYamlAbsFilepath, err := filepath.Abs(outputYamlFilepath)
 	if err != nil {
