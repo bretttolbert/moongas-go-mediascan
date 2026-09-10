@@ -15,13 +15,17 @@ func ScanArtists(conf MediascanConf) Artists {
 	for _, mediaDir := range conf.MediaDirs {
 		err := filepath.Walk(mediaDir,
 			func(path string, info os.FileInfo, err error) error {
+				if err != nil {
+					log.Printf("ERROR accessing %s: %v", path, err)
+					return nil
+				}
+				if info == nil {
+					log.Printf("Skipping nil file info for %s", path)
+					return nil
+				}
 
 				if !info.IsDir() && info.Name() == "artist.yaml" {
-
 					log.Printf("Reading filepath %s", path)
-					if err != nil {
-						return err
-					}
 					if ContainsAnyOf(path, conf.ExcludePaths) {
 						log.Printf("Skipping %s (ExcludePaths)", path)
 						countSkipped += 1

@@ -53,6 +53,15 @@ func ScanFiles(conf MediascanConf) MediaFiles {
 	for _, mediaDir := range conf.MediaDirs {
 		err := filepath.Walk(mediaDir,
 			func(path string, info os.FileInfo, err error) error {
+				if err != nil {
+					log.Printf("ERROR accessing %s: %v", path, err)
+					return nil
+				}
+				if info == nil {
+					log.Printf("Skipping nil file info for %s", path)
+					return nil
+				}
+
 				var m MediaFile
 				m.Path = path                                  // path to media file
 				var albumDirPath = filepath.Dir(path)          // path to album dir
