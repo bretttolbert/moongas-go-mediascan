@@ -18,6 +18,13 @@ import (
 )
 
 func main() {
+	cwd, err := os.Getwd()
+	if err != nil {
+		log.Printf("Unable to determine current working directory: %v", err)
+	} else {
+		log.Printf("Current working directory: %s", cwd)
+	}
+
 	if len(os.Args) != 3 {
 		fmt.Println("Error: Invalid arguments")
 		fmt.Println("Usage: go run cmd/scantodb/main.go {config yaml filepath} {output database filepath}")
