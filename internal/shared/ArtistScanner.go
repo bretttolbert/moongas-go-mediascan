@@ -29,7 +29,7 @@ func ScanArtists(conf MediascanConf) Artists {
 					return nil
 				}
 
-				if !info.IsDir() && info.Name() == "artist.yaml" {
+				if !info.IsDir() && info.Name() == "artist.yml" {
 					log.Printf("Reading filepath %s", path)
 					if ContainsAnyOf(path, conf.ExcludePaths) {
 						log.Printf("Skipping %s (ExcludePaths)", path)

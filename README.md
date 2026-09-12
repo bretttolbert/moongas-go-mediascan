@@ -3,7 +3,7 @@
 Simple and fast Golang command-line utility for scanning media library files and metadata files, extracting metadata (e.g. ID3v2 tags) and saving it into an SQLite database. 
 
 - A component of the `moongas` ecosystem of media library tools.
-- Suports reading metadata `moongas` metadata file formats such as `artist.yaml` files
+- Suports reading metadata `moongas` metadata file formats such as `artist.yml` files
 - Output format (SQLite database) is compatible with `moongas-mediascan-py` python package
 
 ## Database Schema
@@ -13,33 +13,33 @@ The output database contains two tables:
 | Table | Contents |
 | ----- | -------- |
 | mediafile | Track metadata from individual media files (ID3 tag information read from `mp3` files) |
-| artist | Metadata from `artist.yaml` files |
+| artist | Metadata from `artist.yml` files |
 
 ## Usage
 
 ### Scan to Database
 
-- [`cmd/scantodb/main.go`](./cmd/scantodb/main.go) - Scans media libraries for both mediafiles and moongas `artist.yaml` files, outputs an SQLite database (`.db`) file
+- [`cmd/scantodb/main.go`](./cmd/scantodb/main.go) - Scans media libraries for both mediafiles and moongas `artist.yml` files, outputs an SQLite database (`.db`) file
 ```bash
 go run cmd/scantodb/main.go mediascan-config.yaml mediascan.db
 ```
 
 ### Scan to Yaml (deprecated)
 
-These commands scan media files and `artist.yaml` files and output massive combined yaml files. This was the original implementation before switching to sqlite. These may be removed in the future.
+These commands scan media files and `artist.yml` files and output massive combined yaml files. This was the original implementation before switching to sqlite. These may be removed in the future.
 
-- [`cmd/scanfilesyaml/main.go`](./cmd/scanfilesyaml/main.go) - Recursively scan a directory for media files, extract metadata (including ID3v2 tags from both MP3 and M4A files), and save the output in a mediafiles YAML file (`files.yaml`). 
+- [`cmd/scanfilesyaml/main.go`](./cmd/scanfilesyaml/main.go) - Recursively scan a directory for media files, extract metadata (including ID3v2 tags from both MP3 and M4A files), and save the output in a mediafiles YAML file (`files.yml`). 
 - Reads configuration from YAML file e.g. [mediascan-config.yaml](./mediascan-config.yaml)
 - Has only two required command-line arguments: `{config yaml filepath}` and `{output yaml filepath}`
 - Created specifically to run fast on a Raspberry Pi single-board computer as part of another project of mine.
 - Usage:
 ```bash
-go run cmd/scanfilesyaml/main.go mediascan-config.yaml files.yaml
+go run cmd/scanfilesyaml/main.go mediascan-config.yaml files.yml
 ```
-- [`cmd/scanartistsyaml/main.go`](./cmd/scanartistsyaml/main.go) - Scans artist directories for `artist.yaml` files and aggregates them into a combined artists YAML file (`artists.yaml`).
+- [`cmd/scanartistsyaml/main.go`](./cmd/scanartistsyaml/main.go) - Scans artist directories for `artist.yml` files and aggregates them into a combined artists YAML file (`artists.yml`).
 - Usage:
 ```bash
-go run cmd/scanartistsyaml/main.go mediascan-config.yaml artists.yaml
+go run cmd/scanartistsyaml/main.go mediascan-config.yaml artists.yml
 ```
 
 ## mediascan.go YAML Configuration file Reference
@@ -60,7 +60,7 @@ The mediascan.go YAML configuration file (example: [conf.yaml](./mediascan-confi
 | `getmp3duration` | (`true`, `false`) whether to calculate mp3 duration using `tcolgate/mp3` (**warning: slow*) |
 
 ### Dependencies
-- [gopkg.in/yaml.v3](https://pkg.go.dev/gopkg.in/yaml.v3) (Used for generating files.yaml)
+- [gopkg.in/yaml.v3](https://pkg.go.dev/gopkg.in/yaml.v3) (Used for generating files.yml)
 - [dhowden/tag](https://github.com/dhowden/tag) (Used for reading ID3 tags)
     - `dhowden/tag` is a nice little Go library for ID3, MP4 and OGG/FLAC metadata parsing. I added support for [genre codes in the 148-191 range](https://en.wikipedia.org/wiki/List_of_ID3v1_genres#Extension_by_Winamp) and David was kind enough to merge my [PR](https://github.com/dhowden/tag/pull/103).
 - [tcolgate/mp3](https://github.com/tcolgate/mp3) (Used for calculating MP3 duration)
@@ -96,7 +96,7 @@ sys	0m1.299s
 
 ## Performance Demo 2 - Raspberry Pi 4 model B
 ```bash
-$ time go run mediascan.go conf.yaml files.yaml
+$ time go run mediascan.go conf.yaml files.yml
 2022/07/04 15:06:39 Successfully loaded 8376 media files
 
 real	0m18.652s
@@ -106,7 +106,7 @@ sys	0m11.406s
 
 ## Performance Demo 3 - Raspberry Pi Zero 2W
 ```bash
-$ time go run mediascan.go conf.yaml files.yaml
+$ time go run mediascan.go conf.yaml files.yml
 2022/07/04 15:21:14 Successfully loaded 8376 media files
 
 real	1m18.217s
@@ -182,12 +182,12 @@ Now you should be all set to run mediascan.
 
 You can run it from the mediascan directory like this:
 ```bash
-go run mediascan.go conf.yaml files.yaml
+go run mediascan.go conf.yaml files.yml
 ```
 
 Or you can run it from any directory like this:
 ```bash
-go run github.com/bretttolbert/mediascan conf.yaml files.yaml
+go run github.com/bretttolbert/mediascan conf.yaml files.yml
 ```
 
 Happy scanning!

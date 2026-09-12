@@ -1,7 +1,7 @@
 package main
 
 // Unlike the yaml scanners, this one scans everything in one cmd,
-// i.e. both media files and artist.yaml files,
+// i.e. both media files and artist.yml files,
 // and outputs a single sqlite database with multiple tables
 // (currently the tables are "mediafile" and "artist")
 

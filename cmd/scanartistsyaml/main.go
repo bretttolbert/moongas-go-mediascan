@@ -21,7 +21,7 @@ func main() {
 	if len(os.Args) < 3 || len(os.Args) > 4 {
 		fmt.Println("Error: Invalid arguments")
 		fmt.Println("Usage: go run cmd/scanartistsyaml/main.go {config yaml filepath} {output yaml filepath} [mediaRootdir]")
-		fmt.Println("Example: go run cmd/scanartistsyaml/main.go mediascan-config.yaml artists.yaml /path/to/root")
+		fmt.Println("Example: go run cmd/scanartistsyaml/main.go mediascan-config.yaml artists.yml /path/to/root")
 		os.Exit(1)
 	}
 	configYamlFilepath := os.Args[1]
@@ -51,6 +51,6 @@ func main() {
 	err2 := os.WriteFile(outputYamlAbsFilepath, yamlData, 0644)
 	shared.Check(err2, outputYamlAbsFilepath)
 
-	log.Printf("Successfully loaded %d artist.yaml files", len(artists.Artists))
+	log.Printf("Successfully loaded %d artist.yml files", len(artists.Artists))
 	log.Printf("Written to file %s", outputYamlAbsFilepath)
 }

@@ -7,7 +7,7 @@ type Date struct {
 	D int `yaml:"d,omitempty"`
 }
 
-// the contents of the artist_data block of an artist.yaml file
+// the contents of the artist_data block of an artist.yml file
 // keep me in sync with python/mediascan/src/artistdata.py
 type ArtistData struct {
 	// Mandatory or non-pointer fields:
