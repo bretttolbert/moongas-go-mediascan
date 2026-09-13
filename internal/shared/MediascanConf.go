@@ -10,6 +10,5 @@ type MediascanConf struct {
 	ExcludeAlbum       []string `yaml:"excludeAlbum"`
 	ExcludeGenre       []string `yaml:"excludeGenre"`
 	SortBy             string   `yaml:"sortBy"`
-	GroupBy            string   `yaml:"groupBy"`
 	GetMp3Duration     bool     `yaml:"getMp3Duration"`
 }

@@ -1,0 +1,14 @@
+{
+  "go.buildOnSave": "workspace",
+  "go.vetOnSave": "workspace",
+  "gopls": {
+    "analyses": {
+      "nilness": true,
+      "unusedparams": true,
+      "unusedwrite": true,
+      "useany": true,
+      "modernize": true
+    },
+    "staticcheck": true
+  }
+}

@@ -11,10 +11,8 @@ func StringInSlice(a string, list []string) bool {
 	return false
 }
 
-/**
- * Returns true if the given string (a) contains any of the substrings
- * in the given slice of strings (list) (case-insensitive)
- */
+// ContainsAnyOf returns true if the given string (a) contains any of the
+// substrings in the given slice of strings (list) (case-insensitive).
 func ContainsAnyOf(a string, list []string) bool {
 	if len(a) > 0 {
 		a = strings.ToLower(a)

@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-type MediaFile struct {
+type MediaFileData struct {
 	Path        string // the path to the mediafile
 	AlbumPath   string // the parent dir of the mediafile
 	ArtistPath  string // i.e. two dir levels up from mediafile path

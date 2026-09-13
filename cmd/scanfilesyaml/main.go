@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"strconv"
 
 	"github.com/bretttolbert/moongas-mediascan-go/internal/shared"
 	"gopkg.in/yaml.v3"
@@ -45,31 +44,12 @@ func main() {
 		log.Fatalf("Failed to get absolute path to output file: %v", err)
 	}
 
-	var files shared.MediaFiles = shared.ScanFiles(conf)
-
-	// consider "GroupBy" deprecated, I'm probably going to remove this feature
-	// (GroupBy and MediaFilePlaylistList) as it duplicates functionality provided by mediaserver
-	// however I was going to use for my timebox project, we shall see
-	if conf.GroupBy == "year" {
-		var mediaFilePlaylistList shared.MediaFilePlaylistList
-		mediaFilePlaylistList.Playlists = make(map[string][]shared.MediaFile)
-		for _, m := range files.Files {
-			year := strconv.FormatInt(int64(m.Year), 10)
-			_, ok := mediaFilePlaylistList.Playlists[year]
-			if !ok {
-				mediaFilePlaylistList.Playlists[year] = make([]shared.MediaFile, 0)
-			}
-			mediaFilePlaylistList.Playlists[year] = append(mediaFilePlaylistList.Playlists[year], m)
-		}
-		yamlData, err := yaml.Marshal(&mediaFilePlaylistList)
-		shared.Check(err, "")
-		err2 := os.WriteFile(outputYamlFilepath, yamlData, 0644)
-		shared.Check(err2, outputYamlFilepath)
-	} else {
-		yamlData, err := yaml.Marshal(&files)
-		shared.Check(err, "")
-		err2 := os.WriteFile(outputYamlFilepath, yamlData, 0644)
-		shared.Check(err2, outputYamlFilepath)
-	}
+	var files = shared.ScanFiles(conf)
+	var filesYaml = shared.MediaFilesYamlFile{}
+	filesYaml.Files = files
+	yamlData, err := yaml.Marshal(&filesYaml)
+	shared.Check(err, "")
+	err2 := os.WriteFile(outputYamlFilepath, yamlData, 0644)
+	shared.Check(err2, outputYamlFilepath)
 	log.Printf("Written to file %s", outputYamlAbsFilepath)
 }

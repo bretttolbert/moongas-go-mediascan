@@ -45,8 +45,8 @@ func getMp3Duration(path string) (duration float64) {
 	return math.Round(t*100) / 100
 }
 
-func ScanFiles(conf MediascanConf) MediaFiles {
-	var files MediaFiles
+func ScanFiles(conf MediascanConf) []MediaFileData {
+	var files []MediaFileData
 	countLoadFailed := 0
 	countTagsFailed := 0
 	countSkipped := 0
@@ -67,7 +67,7 @@ func ScanFiles(conf MediascanConf) MediaFiles {
 					return nil
 				}
 
-				var m MediaFile
+				var m MediaFileData
 				m.Path = path                                  // path to media file
 				var albumDirPath = filepath.Dir(path)          // path to album dir
 				var artistDirPath = filepath.Dir(albumDirPath) // path to artist dir
@@ -82,9 +82,6 @@ func ScanFiles(conf MediascanConf) MediaFiles {
 				m.Title = name
 
 				log.Printf("Reading filepath %s", path)
-				if err != nil {
-					return err
-				}
 				if info.IsDir() {
 					return nil
 				}
@@ -146,7 +143,7 @@ func ScanFiles(conf MediascanConf) MediaFiles {
 					m.Duration = getMp3Duration(path)
 				}
 
-				files.Files = append(files.Files, m)
+				files = append(files, m)
 
 				return nil
 			})
@@ -158,18 +155,24 @@ func ScanFiles(conf MediascanConf) MediaFiles {
 
 	switch conf.SortBy {
 	case "year":
-		sort.SliceStable(files.Files, func(i, j int) bool {
-			return files.Files[i].Year < files.Files[j].Year
+		sort.SliceStable(files, func(i, j int) bool {
+			return files[i].Year < files[j].Year
 		})
 	case "artist":
-		sort.SliceStable(files.Files, func(i, j int) bool {
-			return files.Files[i].Artist < files.Files[j].Artist
+		sort.SliceStable(files, func(i, j int) bool {
+			return files[i].Artist < files[j].Artist
 		})
 	}
 
-	log.Printf("Successfully loaded %d media files", len(files.Files))
+	log.Printf("Successfully loaded %d media files", len(files))
 	if countLoadFailed > 0 {
 		log.Printf("Failed to load for %d media files", countLoadFailed)
+	}
+	if countTagsFailed > 0 {
+		log.Printf("Failed to read tags for %d media files", countTagsFailed)
+	}
+	if countSkipped > 0 {
+		log.Printf("Skipped %d media files", countSkipped)
 	}
 	if countTagsFailed > 0 {
 		log.Printf("Failed to load tags for %d media files", countTagsFailed)

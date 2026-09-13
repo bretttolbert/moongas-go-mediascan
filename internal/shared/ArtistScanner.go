@@ -8,8 +8,8 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-func ScanArtists(conf MediascanConf) Artists {
-	var artists Artists
+func ScanArtists(conf MediascanConf) []ArtistYamlArtistData {
+	var artists []ArtistYamlArtistData
 	countLoadFailed := 0
 	countSkipped := 0
 	for _, mediaDir := range conf.MediaDirs {
@@ -36,7 +36,7 @@ func ScanArtists(conf MediascanConf) Artists {
 						countSkipped += 1
 						return nil
 					}
-					var a Artist
+					var a ArtistYamlArtistData
 					a.Path = filepath.Dir(path)
 
 					// Read the YAML file
@@ -50,7 +50,7 @@ func ScanArtists(conf MediascanConf) Artists {
 
 					a.ArtistData = dataFile.ArtistData
 
-					artists.Artists = append(artists.Artists, a)
+					artists = append(artists, a)
 				}
 				return nil
 			})

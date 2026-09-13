@@ -45,15 +45,13 @@ func main() {
 	}
 	conf.MediaDirs = resolvedMediaDirs
 
-
 	outputDBAbsFilepath, err := filepath.Abs(outputDBFilepath)
 	if err != nil {
 		log.Fatalf("Failed to get absolute path to output file: %v", err)
 	}
 
-
-	var files shared.MediaFiles = shared.ScanFiles(conf)
-	var artists shared.Artists = shared.ScanArtists(conf)
+	var files = shared.ScanFiles(conf)
+	var artists = shared.ScanArtists(conf)
 
 	os.Remove(outputDBFilepath)
 
@@ -67,16 +65,16 @@ func main() {
 
 	sqliteDatabase, _ := sql.Open("sqlite3", outputDBFilepath)
 	defer sqliteDatabase.Close()
-	createTableMediaFile(sqliteDatabase, files)
-	createTableArtist(sqliteDatabase, artists)
+	createTableMediaFile(sqliteDatabase)
+	createTableArtist(sqliteDatabase)
 
-	for i := 0; i < len(files.Files); i++ {
-		mf := files.Files[i]
+	for i := 0; i < len(files); i++ {
+		mf := files[i]
 		insertMediaFile(sqliteDatabase, mf.Path, mf.AlbumPath, mf.ArtistPath, mf.Title, mf.Artist, mf.AlbumArtist, mf.Album, mf.Genre, mf.Year)
 	}
 
-	for i := 0; i < len(artists.Artists); i++ {
-		a := artists.Artists[i]
+	for i := 0; i < len(artists); i++ {
+		a := artists[i]
 		insertArtist(sqliteDatabase, a.Path, a.ArtistData.ArtistNames[0], a.ArtistData.City, a.ArtistData.CountryCode, a.ArtistData.RegionCode, a.ArtistData.LanguageCodes[0])
 	}
 
@@ -87,7 +85,7 @@ func main() {
 	log.Printf("Written to file %s", outputDBAbsFilepath)
 }
 
-func createTableMediaFile(db *sql.DB, files shared.MediaFiles) {
+func createTableMediaFile(db *sql.DB) {
 	sql := `CREATE TABLE mediafile (
 		"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,		
 		"path" TEXT UNIQUE,
@@ -150,7 +148,7 @@ func insertMediaFile(db *sql.DB, path string, albumpath string, artistpath strin
 	}
 }
 
-func createTableArtist(db *sql.DB, files shared.Artists) {
+func createTableArtist(db *sql.DB) {
 	sql := `CREATE TABLE artist (
 		"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,		
 		"path" TEXT UNIQUE,
@@ -208,6 +206,9 @@ func displayMediaFiles(db *sql.DB) {
 		log.Println("mediafile: ", id, " ", path, " ", albumpath, " ", artistpath, " ", title, " ", artist, " ", albumartist, " ", album, " ", genre, " ", year)
 
 	}
+	if err := row.Err(); err != nil {
+		log.Fatal(err)
+	}
 }
 
 func displayArtists(db *sql.DB) {
@@ -226,5 +227,8 @@ func displayArtists(db *sql.DB) {
 		var languagecode string
 		row.Scan(&id, &path, &name, &city, &countrycode, &regioncode, &languagecode)
 		log.Println("artist: ", id, " ", path, " ", name, " ", city, " ", countrycode, " ", regioncode, " ", languagecode)
+	}
+	if err := row.Err(); err != nil {
+		log.Fatal(err)
 	}
 }

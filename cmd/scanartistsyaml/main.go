@@ -44,13 +44,15 @@ func main() {
 		log.Fatalf("Failed to get absolute path to output file: %v", err)
 	}
 
-	var artists shared.Artists = shared.ScanArtists(conf)
+	var artists = shared.ScanArtists(conf)
+	var artistsYamlFile = shared.ArtistsYamlFile{}
+	artistsYamlFile.Artists = artists
 
-	yamlData, err := yaml.Marshal(&artists)
+	yamlData, err := yaml.Marshal(&artistsYamlFile)
 	shared.Check(err, "")
 	err2 := os.WriteFile(outputYamlAbsFilepath, yamlData, 0644)
 	shared.Check(err2, outputYamlAbsFilepath)
 
-	log.Printf("Successfully loaded %d artist.yml files", len(artists.Artists))
+	log.Printf("Successfully loaded %d artist.yml files", len(artists))
 	log.Printf("Written to file %s", outputYamlAbsFilepath)
 }
