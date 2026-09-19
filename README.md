@@ -1,6 +1,6 @@
-<img src="https://raw.githubusercontent.com/bretttolbert/moongas-mediatunes-web/refs/heads/main/client/public/moongas.svg" width="128" height="128">
+<img src="https://raw.githubusercontent.com/bretttolbert/moongas-mediatunes-web-vue/refs/heads/main/client/public/moongas.svg" width="128" height="128">
 
-# moongas-go-mediascan
+# moongas-mediascan-golang
 
 > 🚧 **Status: Work in Progress (WIP)**  
 > This project is currently under active development. Features, APIs, and documentation are subject to change.
@@ -17,13 +17,13 @@
 - [moongas-py-mediatunes-svc](https://github.com/bretttolbert/moongas-py-mediatunes-svc) [![CI](https://github.com/bretttolbert/moongas-py-mediaserver/actions/workflows/ci.yml/badge.svg)](https://github.com/bretttolbert/moongas-py-mediatunes-svc/actions/workflows/ci.yml) - Python+BlackSheep API service for Moongas hybrid media collections—backend for moongas-mediatunes-web application
 - [moongas-collection-demo](https://github.com/bretttolbert/moongas-collection-demo) [![CI](https://github.com/bretttolbert/moongas-collection-demo/actions/workflows/ci.yml/badge.svg)](https://github.com/bretttolbert/moongas-collection-demo/actions/workflows/ci.yml) - Example Moongas media collection (metadata only)
 - [moongas-py-mediascan](https://github.com/bretttolbert/moongas-py-mediascan) [![CI](https://github.com/bretttolbert/moongas-py-mediascan/actions/workflows/ci.yml/badge.svg)](https://github.com/bretttolbert/moongas-py-mediascan/actions/workflows/ci.yml) - Python package for loading Moongas database and Yaml
-- [moongas-go-mediascan](https://github.com/bretttolbert/moongas-go-mediascan) [![CI](https://github.com/bretttolbert/moongas-go-mediascan/actions/workflows/ci.yml/badge.svg)](https://github.com/bretttolbert/moongas-go-mediascan/actions/workflows/ci.yml) - Golang module to scan media collections and Moongas Yaml metatadata, outputs Moongas database
+- [moongas-mediascan-golang](https://github.com/bretttolbert/moongas-mediascan-golang) [![CI](https://github.com/bretttolbert/moongas-mediascan-golang/actions/workflows/ci.yml/badge.svg)](https://github.com/bretttolbert/moongas-mediascan-golang/actions/workflows/ci.yml) - Golang module to scan media collections and Moongas Yaml metatadata, outputs Moongas database
 - [moongas-py-mediatest](https://github.com/bretttolbert/moongas-py-mediatest) [![CI](https://github.com/bretttolbert/moongas-py-mediatest/actions/workflows/ci.yml/badge.svg)](https://github.com/bretttolbert/moongas-py-mediatest/actions/workflows/ci.yml) - Python tool for enforcing media collection rules (implemented with `pytest`)
 
 ## Features
 
-- Suports reading metadata `moongas` metadata file formats such as `artist.yml` files
-- Output format (SQLite database) is compatible with `moongas-mediascan-py` python package
+- Suports reading metadata Moongas metadata file formats such as `artist.yml` files
+- Output format (SQLite database) is compatible with the Moongas `mediascan` python package
 
 ## Database Schema
 
@@ -61,7 +61,7 @@ go run cmd/mediascan-files-yaml mediascan-config.yml files.yml
 go run cmd/mediascan-artists-yaml mediascan-config.yml artists.yml
 ```
 
-## mediascan.go YAML Configuration file Reference
+## mediascan Yaml Configuration file Reference
 
 The mediascan.go YAML configuration file (example: [mediascan-config.yml](./mediascan-config.yml)) supports the following parameters:
 
