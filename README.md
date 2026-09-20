@@ -17,8 +17,8 @@
 - [moongas-mediatunes-web-vue](https://github.com/bretttolbert/moongas-mediatunes-web-vue) [![CI](https://github.com/bretttolbert/moongas-mediatunes-web-vue/actions/workflows/ci.yml/badge.svg)](https://github.com/bretttolbert/moongas-mediatunes-web-vue/actions/workflows/ci.yml) - A Deno-tooled TypeScript/Vue SPA for Moongas hybrid media collections, pairing with the separate moongas-mediatunes-svc-python-blacksheep backend to seemlessly blend offline and streaming playback
 - [moongas-mediatunes-svc-python-blacksheep](https://github.com/bretttolbert/moongas-mediatunes-svc-python-blacksheep) [![CI](https://github.com/bretttolbert/moongas-mediatunes-svc-python-blacksheep/actions/workflows/ci.yml/badge.svg)](https://github.com/bretttolbert/moongas-mediatunes-svc-python-blacksheep/actions/workflows/ci.yml) - Python+BlackSheep implementation of API service for Moongas hybrid media collections—backend for Moongas mediatunes web application (moongas-mediatunes-web-vue)
 - [moongas-mediatunes-svc-java-javalin](https://github.com/bretttolbert/moongas-mediatunes-svc-java-javalin) [![CI](https://github.com/bretttolbert/moongas-mediatunes-svc-python-blacksheep/actions/workflows/ci.yml/badge.svg)](https://github.com/bretttolbert/moongas-mediatunes-svc-java-javalin/actions/workflows/ci.yml) - Java+Javalin implementation of API service for Moongas hybrid media collections—backend for Moongas mediatunes web application (moongas-mediatunes-web-vue)
-- [moongas-mediascan-go](https://github.com/bretttolbert/moongas-mediascan-go) [![CI](https://github.com/bretttolbert/moongas-mediascan-go/actions/workflows/ci.yml/badge.svg)](https://github.com/bretttolbert/moongas-mediascan-go/actions/workflows/ci.yml) - Golang module to scan media collections and Moongas Yaml metatadata, outputs Moongas database
-- [moongas-mediascan-python](https://github.com/bretttolbert/moongas-mediascan-python) [![CI](https://github.com/bretttolbert/moongas-mediascan-python/actions/workflows/ci.yml/badge.svg)](https://github.com/bretttolbert/moongas-mediascan-python/actions/workflows/ci.yml) - Python library with data classes for loading Moongas mediascan databases and Yaml metadata files
+- [moongas-mediascan-go](https://github.com/bretttolbert/moongas-mediascan-go) [![CI](https://github.com/bretttolbert/moongas-mediascan-go/actions/workflows/ci.yml/badge.svg)](https://github.com/bretttolbert/moongas-mediascan-go/actions/workflows/ci.yml) - Golang module to scan media collections and Moongas YAML metatadata, outputs Moongas database
+- [moongas-mediascan-python](https://github.com/bretttolbert/moongas-mediascan-python) [![CI](https://github.com/bretttolbert/moongas-mediascan-python/actions/workflows/ci.yml/badge.svg)](https://github.com/bretttolbert/moongas-mediascan-python/actions/workflows/ci.yml) - Python library with data classes for loading Moongas mediascan databases and YAML metadata files
 - [moongas-mediascripts-python](https://github.com/bretttolbert/moongas-mediascripts-python) [![CI](https://github.com/bretttolbert/moongas-mediascripts-python/actions/workflows/ci.yml/badge.svg)](https://github.com/bretttolbert/moongas-mediascripts-python/actions/workflows/ci.yml) - Python scripts for working with Moongas media collections.
 - [moongas-mediatest-python-pytest](https://github.com/bretttolbert/moongas-mediatest-python-pytest) [![CI](https://github.com/bretttolbert/moongas-mediatest-python-pytest/actions/workflows/ci.yml/badge.svg)](https://github.com/bretttolbert/moongas-mediatest-python-pytest/actions/workflows/ci.yml) - Python tool for enforcing media collection rules (implemented with `pytest`)
 
@@ -45,13 +45,13 @@ The output database contains two tables:
 go run cmd/mediascan-gen-db mediascan-config.yml mediascan.db
 ```
 
-### Scan to Yaml (deprecated)
+### Scan to YAML (deprecated)
 
-These commands scan media files and `artist.yml` files and output massive combined yaml files. This was the original implementation before switching to sqlite. These may be removed in the future.
+These commands scan media files and `artist.yml` files and output massive combined YAML (.yml) files. This was the original implementation before switching to sqlite. These may be removed in the future.
 
 - [`cmd/ scan-to-files-yaml-yaml`](./cmd/ scan-to-files-yaml-yaml) - Recursively scan a directory for media files, extract metadata (including ID3v2 tags from both MP3 and M4A files), and save the output in a mediafiles YAML file (`files.yml`). 
 - Reads configuration from YAML file e.g. [mediascan-config.yml](./mediascan-config.yml)
-- Has only two required command-line arguments: `{config yaml filepath}` and `{output yaml filepath}`
+- Has only two required command-line arguments: `<config-yaml-filepath>` and `<output-yaml-filepath>`
 - Created specifically to run fast on a Raspberry Pi single-board computer as part of another project of mine.
 - Usage:
 ```bash
@@ -63,7 +63,7 @@ go run cmd/ scan-to-files-yaml-yaml mediascan-config.yml files.yml
 go run cmd/scan-to-artists-yaml-yaml mediascan-config.yml artists.yml
 ```
 
-## mediascan Yaml Configuration file Reference
+## mediascan YAML Configuration file Reference
 
 The  YAML configuration file (example: [mediascan-config.yml](./mediascan-config.yml)) supports the following parameters:
 

@@ -70,6 +70,6 @@ func main() {
 	}
 
 	log.Printf("Scanned %d media files", len(files))
-	log.Printf("Created %d track yaml files", countCreated)
-	log.Printf("Skipped %d track yaml files (already exist)", countSkipped)
+	log.Printf("Created %d track YAML (.yml) files", countCreated)
+	log.Printf("Skipped %d track YAML (.yml) files (already exist)", countSkipped)
 }
