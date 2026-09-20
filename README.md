@@ -63,7 +63,7 @@ go run cmd/mediascan-artists-yaml mediascan-config.yml artists.yml
 
 ## mediascan Yaml Configuration file Reference
 
-The mediascan.go YAML configuration file (example: [mediascan-config.yml](./mediascan-config.yml)) supports the following parameters:
+The  YAML configuration file (example: [mediascan-config.yml](./mediascan-config.yml)) supports the following parameters:
 
 | Property | Description |
 | -------- | ----------- |
@@ -114,7 +114,7 @@ sys	0m1.299s
 
 ## Performance Demo 2 - Raspberry Pi 4 model B
 ```bash
-$ time go run mediascan.go mediascan-config.yml files.yml
+$ time go run cmd/mediascan-files-yaml mediascan-config.yml files.yml
 2022/07/04 15:06:39 Successfully loaded 8376 media files
 
 real	0m18.652s
@@ -124,7 +124,7 @@ sys	0m11.406s
 
 ## Performance Demo 3 - Raspberry Pi Zero 2W
 ```bash
-$ time go run mediascan.go mediascan-config.yml files.yml
+$ time go run cmd/mediascan-files-yaml mediascan-config.yml files.yml
 2022/07/04 15:21:14 Successfully loaded 8376 media files
 
 real	1m18.217s
@@ -200,7 +200,7 @@ Now you should be all set to run mediascan.
 
 You can run it from the mediascan directory like this:
 ```bash
-go run mediascan.go mediascan-config.yml files.yml
+go run cmd/mediascan-files-yaml mediascan-config.yml files.yml
 ```
 
 Or you can run it from any directory like this:
