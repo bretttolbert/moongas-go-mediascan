@@ -134,6 +134,9 @@ sys	0m14.305s
 
 ## Installing Dependencies
 
+> 🚧 **IIVO Warning: Information Is Very Outdated**  
+> The information below is outdated and retained for development purposes only.
+
 Install Go programming language compiler, linker, compiled stdlib and supplementary Go tools
 ```bash
 sudo apt update
@@ -190,8 +193,8 @@ github.com  gopkg.in
 
 Now install mediascan:
 ```bash
-go get github.com/bretttolbert/mediascan
-cd ~/go/src/github.com/bretttolbert/mediascan/ && go install
+go get github.com/bretttolbert/moongas-mediascan-golang
+cd ~/go/src/github.com/bretttolbert/moongas-mediascan-golang/ && go install
 ```
 
 Edit [mediascan-config.yml](mediascan-config.yml) and set the `mediadir` to the desired directory path.
@@ -205,7 +208,7 @@ go run cmd/mediascan-files-yaml mediascan-config.yml files.yml
 
 Or you can run it from any directory like this:
 ```bash
-go run github.com/bretttolbert/mediascan mediascan-config.yml files.yml
+go run github.com/bretttolbert/moongas-mediascan-golang mediascan-config.yml files.yml
 ```
 
 Happy scanning!
