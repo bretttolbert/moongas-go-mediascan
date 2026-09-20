@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/bretttolbert/moongas-mediascan-golang/internal/shared"
+	"github.com/bretttolbert/moongas-mediascan-go/internal/shared"
 	"gopkg.in/yaml.v3"
 )
 
