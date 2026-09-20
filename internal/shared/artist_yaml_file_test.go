@@ -26,7 +26,7 @@ func TestArtistDataFileUnmarshal(t *testing.T) {
     d: 4
 `)
 
-	var f ArtistDataFile
+	var f ArtistYamlFile
 	if err := yaml.Unmarshal(data, &f); err != nil {
 		t.Fatalf("unmarshal: %v", err)
 	}

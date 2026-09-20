@@ -11,7 +11,7 @@ import (
 // key and field names must remain stable.
 func TestArtistsYamlFileMarshalKeys(t *testing.T) {
 	f := ArtistsYamlFile{
-		Artists: []ArtistYamlArtistData{
+		Artists: []ArtistsYamlArtistData{
 			{
 				Path: "/music/Beatles",
 				ArtistData: ArtistData{

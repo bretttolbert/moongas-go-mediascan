@@ -8,7 +8,7 @@ type Date struct {
 }
 
 // ArtistData contains the contents of the artist_data block of an artist.yml file.
-// keep me in sync with python/mediascan/src/artistdata.py
+// keep me in sync with moongas-mediascan-python/src/mediascan/artist_data.py
 type ArtistData struct {
 	// Mandatory or non-pointer fields:
 	ArtistNames   []string `yaml:"artistNames"`
