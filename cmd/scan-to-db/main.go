@@ -28,7 +28,7 @@ func main() {
 	if len(os.Args) < 3 || len(os.Args) > 4 {
 		fmt.Fprintln(os.Stderr, "Error: invalid arguments")
 		fmt.Fprintln(os.Stderr, "Usage: go run cmd/scan-to-db <config-yaml> <output-db> [media-root]")
-		fmt.Fprintln(os.Stderr, "Example: go run cmd/scan-to-db mediascan-config.yaml mediascan.db /path/to/root")
+		fmt.Fprintln(os.Stderr, "Example: go run cmd/scan-to-db mediascan-config.yml mediascan.db /path/to/root")
 		os.Exit(1)
 	}
 	configYamlFilepath := os.Args[1]
