@@ -47,3 +47,57 @@ func TestResolveMediaDirs_RejectsMissingJoinedDir(t *testing.T) {
 		t.Fatal("expected error for missing assembled media dir")
 	}
 }
+
+func TestLoadConf(t *testing.T) {
+	dir := t.TempDir()
+	confPath := filepath.Join(dir, "mediascan-config.yml")
+	content := `mediaDirs:
+  - /data/Music
+  - /data/MusicOther
+mediaExts:
+  - .mp3
+  - .m4a
+excludePaths:
+  - ExcludeThisArtistDir
+excludeTitle:
+  - Live
+excludeArtist:
+  - Some Artist
+excludeAlbumArtist: []
+excludeAlbum:
+  - Some Album
+excludeGenre: []
+sortBy: year
+getMp3Duration: true
+`
+	if err := os.WriteFile(confPath, []byte(content), 0o644); err != nil {
+		t.Fatalf("write config: %v", err)
+	}
+
+	conf := LoadConf(confPath)
+
+	if len(conf.MediaDirs) != 2 || conf.MediaDirs[0] != "/data/Music" || conf.MediaDirs[1] != "/data/MusicOther" {
+		t.Errorf("unexpected media dirs: %#v", conf.MediaDirs)
+	}
+	if len(conf.MediaExts) != 2 || conf.MediaExts[0] != ".mp3" || conf.MediaExts[1] != ".m4a" {
+		t.Errorf("unexpected media exts: %#v", conf.MediaExts)
+	}
+	if len(conf.ExcludePaths) != 1 || conf.ExcludePaths[0] != "ExcludeThisArtistDir" {
+		t.Errorf("unexpected exclude paths: %#v", conf.ExcludePaths)
+	}
+	if len(conf.ExcludeTitle) != 1 || conf.ExcludeTitle[0] != "Live" {
+		t.Errorf("unexpected exclude title: %#v", conf.ExcludeTitle)
+	}
+	if len(conf.ExcludeArtist) != 1 || conf.ExcludeArtist[0] != "Some Artist" {
+		t.Errorf("unexpected exclude artist: %#v", conf.ExcludeArtist)
+	}
+	if len(conf.ExcludeAlbum) != 1 || conf.ExcludeAlbum[0] != "Some Album" {
+		t.Errorf("unexpected exclude album: %#v", conf.ExcludeAlbum)
+	}
+	if conf.SortBy != "year" {
+		t.Errorf("got sortBy %q, want %q", conf.SortBy, "year")
+	}
+	if !conf.GetMp3Duration {
+		t.Error("expected getMp3Duration to be true")
+	}
+}

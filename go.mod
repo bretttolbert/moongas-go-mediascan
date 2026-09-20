@@ -1,4 +1,4 @@
-module github.com/bretttolbert/moongas-mediascan-go
+module github.com/bretttolbert/moongas-mediascan-golang
 
 go 1.25.6
 

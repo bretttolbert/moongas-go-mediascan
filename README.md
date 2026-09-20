@@ -38,7 +38,7 @@ The output database contains two tables:
 
 ### Scan to Database
 
-- [`cmd/mediascan-db`](./cmd/mediascan-db) - Scans media libraries for both mediafiles and moongas `artist.yml` files, outputs an SQLite database (`.db`) file
+- [`cmd/ scan-to-db`](./cmd/ scan-to-db) - Scans media libraries for both mediafiles and moongas `artist.yml` files, outputs an SQLite database (`.db`) file
 ```bash
 go run cmd/mediascan-gen-db mediascan-config.yml mediascan.db
 ```
@@ -47,18 +47,18 @@ go run cmd/mediascan-gen-db mediascan-config.yml mediascan.db
 
 These commands scan media files and `artist.yml` files and output massive combined yaml files. This was the original implementation before switching to sqlite. These may be removed in the future.
 
-- [`cmd/mediascan-files-yaml`](./cmd/mediascan-files-yaml) - Recursively scan a directory for media files, extract metadata (including ID3v2 tags from both MP3 and M4A files), and save the output in a mediafiles YAML file (`files.yml`). 
+- [`cmd/ scan-to-files-yaml-yaml`](./cmd/ scan-to-files-yaml-yaml) - Recursively scan a directory for media files, extract metadata (including ID3v2 tags from both MP3 and M4A files), and save the output in a mediafiles YAML file (`files.yml`). 
 - Reads configuration from YAML file e.g. [mediascan-config.yml](./mediascan-config.yml)
 - Has only two required command-line arguments: `{config yaml filepath}` and `{output yaml filepath}`
 - Created specifically to run fast on a Raspberry Pi single-board computer as part of another project of mine.
 - Usage:
 ```bash
-go run cmd/mediascan-files-yaml mediascan-config.yml files.yml
+go run cmd/ scan-to-files-yaml-yaml mediascan-config.yml files.yml
 ```
-- [`cmd/mediascan-artists-yaml`](./cmd/mediascan-artists-yaml) - Scans artist directories for `artist.yml` files and aggregates them into a combined artists YAML file (`artists.yml`).
+- [`cmd/scan-to-artists-yaml-yaml`](./cmd/scan-to-artists-yaml-yaml) - Scans artist directories for `artist.yml` files and aggregates them into a combined artists YAML file (`artists.yml`).
 - Usage:
 ```bash
-go run cmd/mediascan-artists-yaml mediascan-config.yml artists.yml
+go run cmd/scan-to-artists-yaml-yaml mediascan-config.yml artists.yml
 ```
 
 ## mediascan Yaml Configuration file Reference
@@ -114,7 +114,7 @@ sys	0m1.299s
 
 ## Performance Demo 2 - Raspberry Pi 4 model B
 ```bash
-$ time go run cmd/mediascan-files-yaml mediascan-config.yml files.yml
+$ time go run cmd/ scan-to-files-yaml-yaml mediascan-config.yml files.yml
 2022/07/04 15:06:39 Successfully loaded 8376 media files
 
 real	0m18.652s
@@ -124,7 +124,7 @@ sys	0m11.406s
 
 ## Performance Demo 3 - Raspberry Pi Zero 2W
 ```bash
-$ time go run cmd/mediascan-files-yaml mediascan-config.yml files.yml
+$ time go run cmd/ scan-to-files-yaml-yaml mediascan-config.yml files.yml
 2022/07/04 15:21:14 Successfully loaded 8376 media files
 
 real	1m18.217s
@@ -203,7 +203,7 @@ Now you should be all set to run mediascan.
 
 You can run it from the mediascan directory like this:
 ```bash
-go run cmd/mediascan-files-yaml mediascan-config.yml files.yml
+go run cmd/ scan-to-files-yaml-yaml mediascan-config.yml files.yml
 ```
 
 Or you can run it from any directory like this:

@@ -14,7 +14,7 @@ import (
 
 	_ "github.com/mattn/go-sqlite3" // Import go-sqlite3 library
 
-	"github.com/bretttolbert/moongas-mediascan-go/internal/shared"
+	"github.com/bretttolbert/moongas-mediascan-golang/internal/shared"
 )
 
 func main() {
@@ -26,9 +26,9 @@ func main() {
 	}
 
 	if len(os.Args) < 3 || len(os.Args) > 4 {
-		fmt.Println("Error: Invalid arguments")
-		fmt.Println("Usage: go run cmd/scantodb/main.go {config yaml filepath} {output database filepath} [mediaRootdir]")
-		fmt.Println("Example: go run cmd/scantodb/main.go mediascan-config.yaml mediascan.db /path/to/root")
+		fmt.Fprintln(os.Stderr, "Error: invalid arguments")
+		fmt.Fprintln(os.Stderr, "Usage: go run cmd/scan-to-db <config-yaml> <output-db> [media-root]")
+		fmt.Fprintln(os.Stderr, "Example: go run cmd/scan-to-db mediascan-config.yaml mediascan.db /path/to/root")
 		os.Exit(1)
 	}
 	configYamlFilepath := os.Args[1]

@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/bretttolbert/moongas-mediascan-go/internal/shared"
+	"github.com/bretttolbert/moongas-mediascan-golang/internal/shared"
 	"gopkg.in/yaml.v3"
 )
 
@@ -19,9 +19,9 @@ func main() {
 	}
 
 	if len(os.Args) < 3 || len(os.Args) > 4 {
-		fmt.Println("Error: Invalid arguments")
-		fmt.Println("Usage: go run cmd/scanfilesyaml/main.go {config yaml filepath} {output yaml filepath} [mediaRootdir]")
-		fmt.Println("Example: go run cmd/scanfilesyaml/main.go mediascan-config.yaml files.yml /path/to/root")
+		fmt.Fprintln(os.Stderr, "Error: Invalid arguments")
+		fmt.Fprintln(os.Stderr, "Usage: go run cmd/scan-to-files-yaml <config-yaml> <output-yaml> [media-root]")
+		fmt.Fprintln(os.Stderr, "Example: go run cmd/scan-to-files-yaml mediascan-config.yaml files.yml /path/to/root")
 		os.Exit(1)
 	}
 	configYamlFilepath := os.Args[1]
