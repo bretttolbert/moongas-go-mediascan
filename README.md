@@ -79,6 +79,15 @@ The  YAML configuration file (example: [mediascan-config.yml](./mediascan-config
 | `sortby` | (`year`, `artist`, `none`) media file sort options |
 | `getmp3duration` | (`true`, `false`) whether to calculate mp3 duration using `tcolgate/mp3` (**warning: slow*) |
 
+## Problem: `package moongas-mediascan-go/cmd/scan-to-db is not in std (/usr/lib/go-1.26/src/moongas-mediascan-go/cmd/scan-to-db)`
+
+Solution:
+
+```bash
+cd moongas-mediascan-go
+go build ./cmd/scan-to-db
+```
+
 ### Dependencies
 - [gopkg.in/yaml.v3](https://pkg.go.dev/gopkg.in/yaml.v3) (Used for generating files.yml)
 - [dhowden/tag](https://github.com/dhowden/tag) (Used for reading ID3 tags)
