@@ -40,9 +40,9 @@ The output database contains two tables:
 
 ### Scan to Database
 
-- [`cmd/ scan-to-db`](./cmd/ scan-to-db) - Scans media libraries for both mediafiles and moongas `artist.yml` files, outputs an SQLite database (`.db`) file
+- [`cmd/scan-to-db`](./cmd/scan-to-db) - Scans media libraries for both mediafiles and moongas `artist.yml` files, outputs an SQLite database (`.db`) file
 ```bash
-go run cmd/mediascan-gen-db mediascan-config.yml mediascan.db
+go run cmd/scan-to-db mediascan-config.yml mediascan.db
 ```
 
 ### Scan to YAML (deprecated)
