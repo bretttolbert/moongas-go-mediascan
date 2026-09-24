@@ -11,32 +11,26 @@ import (
 )
 
 func main() {
-	cwd, err := os.Getwd()
-	if err != nil {
-		log.Printf("Unable to determine current working directory: %v", err)
-	} else {
-		log.Printf("Current working directory: %s", cwd)
-	}
+	shared.LogCurrentDir()
 
-	if len(os.Args) < 2 || len(os.Args) > 3 {
-		log.Println("Error: Invalid arguments")
-		log.Println("Usage: go run cmd/scan-to-track-yaml <config-yaml> [media-root]")
-		log.Println("Example: go run cmd/scan-to-track-yaml mediascan-config.yml /path/to/root")
+	overwriteMode, args, err := shared.ParseCommandArgs(os.Args, 1, 2)
+	if err != nil {
+		log.Println("Error:", err)
+		log.Println("Usage: go run cmd/scan-to-track-yaml <config-yaml> [media-root] [--overwrite-existing|--overwrite-newer]")
+		log.Println("Example: go run cmd/scan-to-track-yaml mediascan-config.yml /path/to/root --overwrite-existing")
 		os.Exit(1)
 	}
-	configYamlFilepath := os.Args[1]
+	configYamlFilepath := args[0]
 	mediaRootDir := ""
-	if len(os.Args) == 3 {
-		mediaRootDir = os.Args[2]
+	if len(args) == 2 {
+		mediaRootDir = args[1]
 	}
 
-	conf := shared.LoadConf(configYamlFilepath)
-	resolvedMediaDirs, err := shared.ResolveMediaDirs(mediaRootDir, conf.MediaDirs)
+	conf, err := shared.ResolveScanConfig(configYamlFilepath, mediaRootDir)
 	if err != nil {
 		log.Printf("ERROR: %v", err)
 		os.Exit(1)
 	}
-	conf.MediaDirs = resolvedMediaDirs
 
 	files := shared.ScanFiles(conf)
 
@@ -46,9 +40,16 @@ func main() {
 		ext := filepath.Ext(m.Path)
 		trackYamlFilepath := filepath.Join(m.AlbumPath, strings.TrimSuffix(filepath.Base(m.Path), ext)+".yml")
 		if _, err := os.Stat(trackYamlFilepath); err == nil {
-			log.Printf("Skipping %s (%s already exists)", m.Path, trackYamlFilepath)
-			countSkipped += 1
-			continue
+			shouldOverwrite, err := shared.ShouldOverwriteFile(trackYamlFilepath, m.Path, overwriteMode)
+			if err != nil {
+				log.Printf("ERROR: %v", err)
+				continue
+			}
+			if !shouldOverwrite {
+				log.Printf("Skipping %s (%s already exists)", m.Path, trackYamlFilepath)
+				countSkipped += 1
+				continue
+			}
 		}
 
 		trackYaml := shared.TrackYamlFile{

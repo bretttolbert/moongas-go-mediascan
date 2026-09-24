@@ -4,44 +4,48 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"path/filepath"
 
 	"github.com/bretttolbert/moongas-mediascan-go/internal/shared"
 	"gopkg.in/yaml.v3"
 )
 
 func main() {
-	cwd, err := os.Getwd()
-	if err != nil {
-		log.Printf("Unable to determine current working directory: %v", err)
-	} else {
-		log.Printf("Current working directory: %s", cwd)
-	}
+	shared.LogCurrentDir()
 
-	if len(os.Args) < 3 || len(os.Args) > 4 {
-		fmt.Fprintln(os.Stderr, "Error: Invalid arguments")
-		fmt.Fprintln(os.Stderr, "Usage: go run cmd/scan-to-files-yaml <config-yaml> <output-yaml> [media-root]")
-		fmt.Fprintln(os.Stderr, "Example: go run cmd/scan-to-files-yaml mediascan-config.yml files.yml /path/to/root")
+	overwriteMode, args, err := shared.ParseCommandArgs(os.Args, 2, 3)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "Error:", err)
+		fmt.Fprintln(os.Stderr, "Usage: go run cmd/scan-to-files-yaml <config-yaml> <output-yaml> [media-root] [--overwrite-existing|--overwrite-newer]")
+		fmt.Fprintln(os.Stderr, "Example: go run cmd/scan-to-files-yaml mediascan-config.yml files.yml /path/to/root --overwrite-existing")
 		os.Exit(1)
 	}
-	configYamlFilepath := os.Args[1]
-	outputYamlFilepath := os.Args[2]
+	configYamlFilepath := args[0]
+	outputYamlFilepath := args[1]
 	mediaRootDir := ""
-	if len(os.Args) == 4 {
-		mediaRootDir = os.Args[3]
+	if len(args) == 3 {
+		mediaRootDir = args[2]
 	}
 
-	conf := shared.LoadConf(configYamlFilepath)
-	resolvedMediaDirs, err := shared.ResolveMediaDirs(mediaRootDir, conf.MediaDirs)
+	conf, err := shared.ResolveScanConfig(configYamlFilepath, mediaRootDir)
 	if err != nil {
 		log.Printf("ERROR: %v", err)
 		os.Exit(1)
 	}
-	conf.MediaDirs = resolvedMediaDirs
 
-	outputYamlAbsFilepath, err := filepath.Abs(outputYamlFilepath)
+	outputYamlAbsFilepath, err := shared.ResolveOutputAbsPath(outputYamlFilepath)
 	if err != nil {
-		log.Fatalf("Failed to get absolute path to output file: %v", err)
+		log.Fatal(err)
+	}
+
+	if _, err := os.Stat(outputYamlFilepath); err == nil {
+		shouldOverwrite, err := shared.ShouldOverwriteFile(outputYamlFilepath, "", overwriteMode)
+		if err != nil {
+			log.Fatal(err)
+		}
+		if !shouldOverwrite {
+			log.Printf("Skipping existing output %s", outputYamlFilepath)
+			return
+		}
 	}
 
 	var files = shared.ScanFiles(conf)

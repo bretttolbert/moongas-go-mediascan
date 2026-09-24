@@ -10,7 +10,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"path/filepath"
 
 	_ "github.com/mattn/go-sqlite3" // Import go-sqlite3 library
 
@@ -18,36 +17,42 @@ import (
 )
 
 func main() {
-	cwd, err := os.Getwd()
-	if err != nil {
-		log.Printf("Unable to determine current working directory: %v", err)
-	} else {
-		log.Printf("Current working directory: %s", cwd)
-	}
+	shared.LogCurrentDir()
 
-	if len(os.Args) < 3 || len(os.Args) > 4 {
-		fmt.Fprintln(os.Stderr, "Error: invalid arguments")
-		fmt.Fprintln(os.Stderr, "Usage: go run cmd/scan-to-db <config-yaml> <output-db> [media-root]")
-		fmt.Fprintln(os.Stderr, "Example: go run cmd/scan-to-db mediascan-config.yml mediascan.db /path/to/root")
+	overwriteMode, args, err := shared.ParseCommandArgs(os.Args, 2, 3)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "Error:", err)
+		fmt.Fprintln(os.Stderr, "Usage: go run cmd/scan-to-db <config-yaml> <output-db> [media-root] [--overwrite-existing|--overwrite-newer]")
+		fmt.Fprintln(os.Stderr, "Example: go run cmd/scan-to-db mediascan-config.yml mediascan.db /path/to/root --overwrite-existing")
 		os.Exit(1)
 	}
-	configYamlFilepath := os.Args[1]
-	outputDBFilepath := os.Args[2]
+	configYamlFilepath := args[0]
+	outputDBFilepath := args[1]
 	mediaRootDir := ""
-	if len(os.Args) == 4 {
-		mediaRootDir = os.Args[3]
+	if len(args) == 3 {
+		mediaRootDir = args[2]
 	}
-	conf := shared.LoadConf(configYamlFilepath)
-	resolvedMediaDirs, err := shared.ResolveMediaDirs(mediaRootDir, conf.MediaDirs)
+
+	conf, err := shared.ResolveScanConfig(configYamlFilepath, mediaRootDir)
 	if err != nil {
 		log.Printf("ERROR: %v", err)
 		os.Exit(1)
 	}
-	conf.MediaDirs = resolvedMediaDirs
 
-	outputDBAbsFilepath, err := filepath.Abs(outputDBFilepath)
+	outputDBAbsFilepath, err := shared.ResolveOutputAbsPath(outputDBFilepath)
 	if err != nil {
-		log.Fatalf("Failed to get absolute path to output file: %v", err)
+		log.Fatal(err)
+	}
+
+	if _, err := os.Stat(outputDBFilepath); err == nil {
+		shouldOverwrite, err := shared.ShouldOverwriteFile(outputDBFilepath, "", overwriteMode)
+		if err != nil {
+			log.Fatal(err)
+		}
+		if !shouldOverwrite {
+			log.Printf("Skipping existing database %s", outputDBFilepath)
+			return
+		}
 	}
 
 	var files = shared.ScanFiles(conf)
