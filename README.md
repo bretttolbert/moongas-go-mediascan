@@ -40,27 +40,27 @@ The output database contains two tables:
 
 ### Scan to Database
 
-- [`cmd/ scan-to-db`](./cmd/ scan-to-db) - Scans media libraries for both mediafiles and moongas `artist.yml` files, outputs an SQLite database (`.db`) file
+- [`cmd/scan-to-db`](./cmd/scan-to-db) - Scans media libraries for both mediafiles and moongas `artist.yml` files, outputs an SQLite database (`.db`) file
 ```bash
-go run cmd/mediascan-gen-db mediascan-config.yml mediascan.db
+go run cmd/scan-to-db mediascan-config.yml mediascan.db
 ```
 
 ### Scan to YAML (deprecated)
 
 These commands scan media files and `artist.yml` files and output massive combined YAML (.yml) files. This was the original implementation before switching to sqlite. These may be removed in the future.
 
-- [`cmd/ scan-to-files-yaml-yaml`](./cmd/ scan-to-files-yaml-yaml) - Recursively scan a directory for media files, extract metadata (including ID3v2 tags from both MP3 and M4A files), and save the output in a mediafiles YAML file (`files.yml`). 
+- [`cmd/scan-to-files-yaml`](./cmd/scan-to-files-yaml-yaml) - Recursively scan a directory for media files, extract metadata (including ID3v2 tags from both MP3 and M4A files), and save the output in a mediafiles YAML file (`files.yml`). 
 - Reads configuration from YAML file e.g. [mediascan-config.yml](./mediascan-config.yml)
 - Has only two required command-line arguments: `<config-yaml-filepath>` and `<output-yaml-filepath>`
 - Created specifically to run fast on a Raspberry Pi single-board computer as part of another project of mine.
 - Usage:
 ```bash
-go run cmd/ scan-to-files-yaml-yaml mediascan-config.yml files.yml
+go run cmd/scan-to-files-yaml mediascan-config.yml files.yml
 ```
-- [`cmd/scan-to-artists-yaml-yaml`](./cmd/scan-to-artists-yaml-yaml) - Scans artist directories for `artist.yml` files and aggregates them into a combined artists YAML file (`artists.yml`).
+- [`cmd/scan-to-artists-yaml`](./cmd/scan-to-artists-yaml) - Scans artist directories for `artist.yml` files and aggregates them into a combined artists YAML file (`artists.yml`).
 - Usage:
 ```bash
-go run cmd/scan-to-artists-yaml-yaml mediascan-config.yml artists.yml
+go run cmd/scan-to-artists-yaml mediascan-config.yml artists.yml
 ```
 
 ## mediascan YAML Configuration file Reference
